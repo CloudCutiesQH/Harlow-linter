@@ -1,0 +1,91 @@
+:: StoryTitle
+Comprehensive Harlowe Test
+
+:: Start
+Testing various Harlowe macros
+
+(set: $name to "Alice")
+(put: 100 into $health)
+(move: $health into $maxHealth)
+
+Basic macros:
+(print: $name)
+(display: "Fragment")
+
+Conditional macros:
+(if: $health > 50)[Healthy]
+(unless: $health <= 0)[Alive]
+(else-if: $health > 25)[Moderate]
+(else:)[Critical]
+
+Data structures:
+(set: $items to (a: "sword", "shield", "potion"))
+(set: $stats to (dm: "str", 10, "dex", 15))
+(set: $uniqueItems to (ds: "key", "map"))
+
+String operations:
+(set: $greeting to (uppercase: "hello"))
+(set: $count to (lowercase: "WORLD"))
+(print: (str: $health))
+
+Math operations:
+(set: $result to (max: 5, 10, 3))
+(set: $rounded to (round: 3.7))
+(set: $absolute to (abs: -5))
+
+Links:
+(link: "Click me")[Revealed text]
+(link-goto: "Next", "Chapter1")
+(link-reveal: "Show more")[Hidden content]
+
+Styling:
+(text-colour: red)[Red text]
+(bg: blue)[Blue background]
+(font: "Arial")[Arial text]
+(text-style: "bold", "italic")[Styled]
+
+Transitions:
+(transition: "dissolve")[Fading in]
+(t8n: "slide-right")[Sliding]
+
+Live macros:
+(live: 1s)[
+  Current health: $health
+  (if: $health <= 0)[(stop:)]
+]
+
+Arrays and loops:
+(for: each _item, ...$items)[
+  Item: (print: _item)
+]
+
+Custom hooks:
+|named>[This is a named hook]
+(replace: ?named)[Replaced content]
+(append: ?named)[Appended]
+
+Game state:
+(history:)
+(visited: "Start")
+(passage: "Start")
+
+Saving:
+(save-game: "slot1")
+(load-game: "slot1")
+
+Navigation:
+(go-to: "Start")
+(undo:)
+(restart:)
+
+Input:
+(input: bind $userInput)
+(dropdown: bind $choice, "Option 1", "Option 2")
+
+[[Continue->Chapter1]]
+
+:: Fragment
+Fragment content
+
+:: Chapter1
+Chapter 1 content
