@@ -20,7 +20,8 @@ function testLoadMacroNames() {
   assert(macros.has('set'), 'Should include "set" macro');
   assert(macros.has('if'), 'Should include "if" macro');
   assert(macros.has('print'), 'Should include "print" macro');
-  assert(macros.has('goto'), 'Should include "goto" macro');
+  assert(macros.has('go-to'), 'Should include "go-to" macro');
+  assert(macros.has('link'), 'Should include "link" macro');
   
   console.log(`✓ Loaded ${macros.size} macro names`);
 }

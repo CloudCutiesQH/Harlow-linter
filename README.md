@@ -111,7 +111,7 @@ The linter validates against all macros documented in Harlowe 3.3.8, including:
 - **Data structures**: a, dm, ds, array, datamap, dataset, etc.
 - **Links**: link, link-goto, link-reveal, click, etc.
 - **Styling**: text-colour, bg, font, align, etc.
-- **And many more** (319 total macros including aliases)
+- **And many more** (291 total macros including aliases)
 
 See `HarloweDocs.md` for the complete list of supported macros.
 

@@ -23,7 +23,7 @@ This is chapter 1.
 
 (link: "Continue")[
   (set: $health to $health - 10)
-  (goto: "Chapter2")
+  (go-to: "Chapter2")
 ]
 
 :: Chapter2
