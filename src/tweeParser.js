@@ -5,12 +5,11 @@
 const fs = require('fs');
 
 /**
- * Parse a Twee file into passages
- * @param {string} filePath - Path to the Twee file
+ * Parse Twee content string into passages
+ * @param {string} content - Twee file content as string
  * @returns {Array} Array of passage objects
  */
-function parseTweeFile(filePath) {
-  const content = fs.readFileSync(filePath, 'utf-8');
+function parseTweeContent(content) {
   const passages = [];
   
   // Twee format: :: PassageName [tags]
@@ -50,6 +49,16 @@ function parseTweeFile(filePath) {
   }
   
   return passages;
+}
+
+/**
+ * Parse a Twee file into passages
+ * @param {string} filePath - Path to the Twee file
+ * @returns {Array} Array of passage objects
+ */
+function parseTweeFile(filePath) {
+  const content = fs.readFileSync(filePath, 'utf-8');
+  return parseTweeContent(content);
 }
 
 /**
@@ -94,6 +103,7 @@ function extractMacros(content, startLine = 1) {
 
 module.exports = {
   parseTweeFile,
+  parseTweeContent,
   extractMacros,
   countLines
 };

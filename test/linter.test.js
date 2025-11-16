@@ -2,7 +2,7 @@
  * Simple tests for the Harlowe linter
  */
 
-const { lintFile } = require('../src/linter');
+const { lintFile, lintString } = require('../src/linter');
 const { loadMacroNames } = require('../src/macroParser');
 const path = require('path');
 
@@ -56,6 +56,41 @@ function testInvalidFile() {
   console.log(`✓ Invalid file test passed (found ${results.errors.length} errors)`);
 }
 
+function testLintString() {
+  console.log('Testing lintString function...');
+  
+  // Test with valid content
+  const validContent = `:: Start
+(set: $name to "Player")
+(print: $name)
+[[Next->Chapter1]]
+
+:: Chapter1
+Chapter content here.
+`;
+  
+  const validResult = lintString(validContent, 'test-string.twee');
+  assert(validResult.isValid, 'Valid string should have no errors');
+  assert(validResult.errors.length === 0, 'Should have 0 errors');
+  assert(validResult.passageCount === 2, 'Should have 2 passages');
+  
+  // Test with invalid content
+  const invalidContent = `:: Start
+(sett: $name to "Player")
+(invalidmacro: "test")
+`;
+  
+  const invalidResult = lintString(invalidContent);
+  assert(!invalidResult.isValid, 'Invalid string should have errors');
+  assert(invalidResult.errors.length >= 2, 'Should detect invalid macros');
+  
+  const firstError = invalidResult.errors[0];
+  assert(firstError.type === 'invalid-macro', 'Should identify error type');
+  assert(firstError.suggestion === 'set', 'Should suggest correct macro');
+  
+  console.log('✓ lintString test passed');
+}
+
 function runTests() {
   console.log('\n=== Running Harlowe Linter Tests ===\n');
   
@@ -63,6 +98,7 @@ function runTests() {
     testLoadMacroNames();
     testValidFile();
     testInvalidFile();
+    testLintString();
     
     console.log('\n✓ All tests passed!\n');
     process.exit(0);

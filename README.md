@@ -10,6 +10,7 @@ A linter for validating Harlowe code in Twee files. This tool scans your Twee st
 - ✅ Reports line and column numbers for errors
 - ✅ Supports both single files and directories
 - ✅ Works with `.twee` and `.tw` file extensions
+- ✅ Can parse and lint from strings (for programmatic use)
 
 ## Installation
 
@@ -114,6 +115,93 @@ The linter validates against all macros documented in Harlowe 3.3.8, including:
 - **And many more** (291 total macros including aliases)
 
 See `HarloweDocs.md` for the complete list of supported macros.
+
+## Programmatic Usage
+
+You can use the linter as a library in your Node.js projects:
+
+### Linting from a string
+
+```javascript
+const { lintString } = require('harlowe-linter');
+
+const tweeContent = `:: Start
+(set: $name to "Player")
+(print: $name)
+
+:: Chapter1
+(sett: $health to 100)
+`;
+
+const results = lintString(tweeContent, 'my-story.twee');
+
+console.log('Errors found:', results.errors.length);
+console.log('Is valid:', results.isValid);
+
+// Access specific errors
+results.errors.forEach(error => {
+  console.log(`${error.passage} (line ${error.line}): ${error.message}`);
+  if (error.suggestion) {
+    console.log(`  Did you mean: ${error.suggestion}?`);
+  }
+});
+```
+
+### Linting from a file
+
+```javascript
+const { lintFile } = require('harlowe-linter');
+
+const results = lintFile('./story.twee');
+
+if (results.isValid) {
+  console.log('No errors found!');
+} else {
+  console.log(`Found ${results.errors.length} errors`);
+}
+```
+
+### Available Functions
+
+- `lintString(content, sourceName)` - Lint Twee content from a string
+  - `content` (string): The Twee file content
+  - `sourceName` (string, optional): Name for the source (defaults to `'<string>'`)
+  - Returns: Linting results object
+
+- `lintFile(filePath)` - Lint a Twee file
+  - `filePath` (string): Path to the Twee file
+  - Returns: Linting results object
+
+- `formatResults(results)` - Format linting results as a readable string
+  - `results` (object): Linting results from `lintString` or `lintFile`
+  - Returns: Formatted string
+
+### Results Object
+
+Both `lintString` and `lintFile` return an object with:
+
+```javascript
+{
+  filePath: string,        // Source name or file path
+  errors: Array,           // Array of error objects
+  warnings: Array,         // Array of warning objects
+  passageCount: number,    // Number of passages found
+  isValid: boolean         // true if no errors found
+}
+```
+
+Each error object contains:
+
+```javascript
+{
+  type: string,           // Error type: 'invalid-macro', 'unclosed-macro', etc.
+  message: string,        // Human-readable error message
+  passage: string,        // Name of the passage containing the error
+  line: number,           // Line number in the file
+  column: number,         // Column number in the file
+  suggestion: string      // Optional suggestion for fixing the error
+}
+```
 
 ## Development
 

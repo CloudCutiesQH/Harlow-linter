@@ -3,7 +3,52 @@
  */
 
 const { loadMacroNames } = require('./macroParser');
-const { parseTweeFile, extractMacros } = require('./tweeParser');
+const { parseTweeFile, parseTweeContent, extractMacros } = require('./tweeParser');
+
+/**
+ * Lint Twee content string for Harlowe code errors
+ * @param {string} content - Twee content as a string
+ * @param {string} [sourceName='<string>'] - Optional name for the source (used in error reporting)
+ * @returns {Object} Linting results with errors and warnings
+ */
+function lintString(content, sourceName = '<string>') {
+  const validMacros = loadMacroNames();
+  const passages = parseTweeContent(content);
+  
+  const errors = [];
+  const warnings = [];
+  
+  // Check each passage
+  for (const passage of passages) {
+    const macros = extractMacros(passage.content, passage.startLine);
+    
+    // Validate each macro
+    for (const macro of macros) {
+      if (!validMacros.has(macro.name)) {
+        errors.push({
+          type: 'invalid-macro',
+          message: `Unknown macro name: '${macro.name}'`,
+          passage: passage.name,
+          line: macro.line,
+          column: macro.column,
+          suggestion: findSimilarMacro(macro.name, validMacros)
+        });
+      }
+    }
+    
+    // Check for unclosed macros (basic check for unmatched parentheses)
+    const unclosedErrors = checkUnclosedMacros(passage.content, passage.name, passage.startLine);
+    errors.push(...unclosedErrors);
+  }
+  
+  return {
+    filePath: sourceName,
+    errors,
+    warnings,
+    passageCount: passages.length,
+    isValid: errors.length === 0
+  };
+}
 
 /**
  * Lint a Twee file for Harlowe code errors
@@ -206,6 +251,7 @@ function formatResults(results) {
 
 module.exports = {
   lintFile,
+  lintString,
   formatResults,
   checkUnclosedMacros,
   findSimilarMacro
