@@ -1,0 +1,22 @@
+{
+  "name": "harlowe-linter",
+  "version": "1.0.0",
+  "main": "src/linter.js",
+  "bin": {
+    "harlowe-lint": "./src/cli.js"
+  },
+  "scripts": {
+    "test": "node test/linter.test.js",
+    "lint": "node src/cli.js"
+  },
+  "keywords": [
+    "harlowe",
+    "twine",
+    "twee",
+    "linter",
+    "validator"
+  ],
+  "author": "",
+  "license": "MIT",
+  "description": "A linter for validating Harlowe code in Twee files"
+}

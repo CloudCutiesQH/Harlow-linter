@@ -1,0 +1,25 @@
+:: StoryTitle
+Story With Errors
+
+:: Start
+This passage has some errors.
+
+(sett: $name to "Player")
+This uses an invalid macro name 'sett' instead of 'set'
+
+(if: $health > 50)[
+  Content here
+(This macro is not closed properly
+
+(invalidmacro: "test")
+This macro doesn't exist in Harlowe
+
+(set: $value to 10
+
+Another unclosed macro
+
+[[Next->Chapter1]]
+
+:: Chapter1
+(print: "Hello"
+Missing closing parenthesis

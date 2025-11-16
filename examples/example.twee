@@ -1,0 +1,52 @@
+:: StoryTitle
+My Test Story
+
+:: Start
+Welcome to the story!
+
+(set: $name to "Player")
+(set: $health to 100)
+
+Your name is $name and you have $health health points.
+
+[[Next->Chapter1]]
+
+:: Chapter1
+This is chapter 1.
+
+(if: $health > 50)[
+  You're feeling good!
+]
+(else:)[
+  You're not feeling well.
+]
+
+(link: "Continue")[
+  (set: $health to $health - 10)
+  (goto: "Chapter2")
+]
+
+:: Chapter2
+Chapter 2 content here.
+
+(print: "Your health is now " + (str: $health))
+
+(display: "HealthBar")
+
+[[End->Ending]]
+
+:: HealthBar
+Health: (print: $health)/100
+
+:: Ending
+The End!
+
+(if: $health > 75)[
+  You survived in great condition!
+](else-if: $health > 25)[
+  You survived, but barely.
+](else:)[
+  You barely made it.
+]
+
+(restart:)
